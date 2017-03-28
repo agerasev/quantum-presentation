@@ -1,0 +1,34 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{braket}
+\usepackage{color}
+
+\newcommand{\rc}[1]{\textcolor{red}{#1}}
+\newcommand{\gc}[1]{\textcolor{green}{#1}}
+\newcommand{\bc}[1]{\textcolor{blue}{#1}}
+
+\begin{document}
+
+\title{Quantum Computations}   
+
+\section{basics}
+
+\frame{
+	\frametitle{Qubit}
+	$$\alpha\ket{0} + \beta\ket{1}$$
+	$$\alpha, \beta \in \mathbb{C};\; |\alpha|^2 + |\beta|^2 = 1$$
+	$$\ket{\phi} = \rc{\alpha_\phi} \ket{0} + \rc{\beta_\phi} \ket{1}$$
+	$$\ket{\psi} = \bc{\alpha_\psi} \ket{0} + \bc{\beta_\psi} \ket{1}$$
+	$$\ket{\phi\psi} = \alpha_\phi \alpha_\psi \ket{00} + \alpha_\phi \beta_\psi \ket{01} + \beta_\phi \alpha_\psi \ket{10} + \beta_\phi \beta_\psi \ket{11}$$
+	$$\ket{\zeta\eta} = \alpha_{00} \ket{00} + \alpha_{01} \ket{01} + \alpha_{10} \ket{10} + \alpha_{11} \ket{11}, \; \sum_{i=00}^{11}{|\alpha_i|^2} = 1$$
+	$$\ket{\nu_0 \nu_1 ... \nu_n} = \sum_{i={00..0}}^{11..1}{\alpha_i \ket{i}}, \; \sum_{i={00..0}}^{11..1}{|\alpha_i|^2} = 1$$
+}
+
+\section{algorithms}
+
+\end{document}
