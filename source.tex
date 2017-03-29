@@ -27,7 +27,7 @@
 
 \section{Основы}
 \frame{
-	\frametitle{Квантовый бит}
+	\frametitle{Кубит}
 	$$\alpha\ket{0} + \beta\ket{1}$$
 	$$\alpha, \beta \in \mathbb{C};\; |\alpha|^2 + |\beta|^2 = 1$$
 	$$\ket{\phi} = \rc{\alpha_\phi} \ket{0} + \rc{\beta_\phi} \ket{1}$$
@@ -58,11 +58,11 @@
 	либо сбалансирована --- $\sum_{i=0}^{2^n-1}{(-1)^{f(i)}} = 0$.
 	$$\hat{U}_f\ket{\bc{x_1, ..., x_n},\; \rc{x_{n+1}}} = \ket{x_1, ..., x_n,\; x_{n+1} + f(x_1, ..., x_n)}$$
 	\pdfimg{deutsch.pdf}{200pt}
-	$$\ket{\theta} = \hat{H}_{\bc{1..n}} (\hat{U}_{f} \hat{H}_{\bc{1..n},\rc{n+1}} \ket{\bc{0..0}\rc{1}})_{\bc{1..n}}$$
+	$$\ket{\theta} = \hat{H}^{(\bc{1..n})} (\hat{U}_{f} \hat{H}^{(\bc{1..n},\rc{n+1})} \ket{\bc{0..0}\rc{1}})_{\bc{1..n}}$$
 }
 \frame{
 	\frametitle{Задача Дойча}
-	$$\ket{\phi} = \hat{H}_{\bc{1..n},\rc{n+1}}\ket{\bc{0..0}\rc{1}} = 
+	$$\ket{\phi} = \hat{H}^{(\bc{1..n},\rc{n+1})}\ket{\bc{0..0}\rc{1}} = 
 	  \frac{1}{C_1}\bc{(\prod_{i=1}^{n}{\ket{0}_i + \ket{1}_i})}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})} =$$
 	$$= \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{\ket{i}_{1..n}}}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})},\; C_1 = 2^{\frac{n+1}{2}}$$
 	$$\ket{\psi} = \hat{U}_f\ket{\phi} = \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{\ket{i}_{1..n}}}\rc{(\ket{0 + f(i)}_{n+1} - \ket{1 + f(i)}_{n+1})} =$$
@@ -71,11 +71,41 @@
 }
 \frame{
 	\frametitle{Задача Дойча}
-	$$\ket{\theta} = \gc{\hat{H}_{1..n}} \ket{\psi}_{1..n} = \frac{1}{2^{\frac{n}{2}}}\sum_{i=0}^{2^n-1}{(-1)^{f(i)}\gc{\hat{H}_{1..n}}\ket{i}}$$
-	$$\gc{\hat{H}_{1..n}}\ket{i} = \frac{1}{2^{\frac{n}{2}}}(\bc{\ket{0..0}} + ...)$$
+	$$\ket{\theta} = \gc{\hat{H}^{(1..n)}} \ket{\psi}_{1..n} = \frac{1}{2^{\frac{n}{2}}}\sum_{i=0}^{2^n-1}{(-1)^{f(i)}\gc{\hat{H}^{(1..n)}}\ket{i}}$$
+	$$\gc{\hat{H}^{(1..n)}}\ket{i} = \frac{1}{2^{\frac{n}{2}}}(\bc{\ket{0..0}} + ...)$$
 	$$\ket{\theta} = \rc{\frac{1}{2^n}}((\rc{\sum_{i=0}^{2^n-1}{(-1)^{f(i)}}})\bc{\ket{0..0}} + ...) = \rc{A}\bc{\ket{0..0}} + ...$$
 	Если $f$ постоянна, тогда $\rc{A} = 1$, и при измерении $\ket{\theta}$ всегда получим $\bc{\ket{0..0}}$. \newline
 	Если $f$ сбалансирована, тогда $\rc{A} = 0$, и при измерении $\ket{\theta}$ никогда не получим $\bc{\ket{0..0}}$.
+}
+
+\frame{
+	\frametitle{Невозможность квантового копирования}
+	$$\hat{U}_{xerox}\ket{\phi}\ket{0} = \ket{\phi}\ket{\phi}$$
+	$$\ket{\phi} = c_1\ket{\phi_1} + c_2\ket{\phi_2}$$
+	$$\hat{U}_{xerox}(c_1\ket{\phi_1} + c_2\ket{\phi_2})\ket{0} = c_1\ket{\phi_1}\ket{\phi_1} + c_2\ket{\phi_2}\ket{\phi_2} \neq$$
+	$$\neq \ket{\phi}\ket{\phi} = c_1^2\ket{\phi_1}\ket{\phi_1} + c_1c_2\ket{\phi_1}\ket{\phi_2} + c_1c_2\ket{\phi_2}\ket{\phi_1} + c_2^2\ket{\phi_2}\ket{\phi_2}$$
+}
+
+\newcommand{\ketA}[1]{\rc{\ket{#1}_A}}
+\newcommand{\ketB}[1]{\gc{\ket{#1}_B}}
+\newcommand{\ketC}[1]{\bc{\ket{#1}_C}}
+\newcommand{\ketAB}[1]{\ket{#1}_{\rc{A}\gc{B}}}
+\newcommand{\ketBC}[1]{\ket{#1}_{\gc{B}\bc{C}}}
+\newcommand{\ketAC}[1]{\ket{#1}_{\rc{A}\bc{C}}}
+\newcommand{\ketABC}[1]{\ket{#1}_{\rc{A}\gc{B}\bc{C}}}
+
+\frame{
+	\frametitle{Квантовая телепортация}
+	$$\ket{\gamma}_C = a\ket{0}_C + b\ket{1}_C$$
+	$$\ket{\phi^\pm} = \frac{1}{\sqrt{2}}(\ket{00}\pm\ket{11})$$
+	$$\ket{\psi^\pm} = \frac{1}{\sqrt{2}}(\ket{01}\pm\ket{10})$$
+	$$\ketABC{\xi} = \ketAB{\phi^+}\ketC{\gamma} = \frac{1}{\sqrt{2}}(\ketAB{00} + \ketAB{11})(a\ketC{0} + b\ketC{1}) =$$
+	$$= \frac{1}{2}(\ketAC{\phi^+} + \ketAC{\phi^-}\sigma_z^{\gc{(B)}} + \ketAC{\psi^+}\sigma_x^{\gc{(B)}} + \ketAC{\psi^-}i\sigma_y^{\gc{(B)}}))\ketB{\gamma}$$
+	$$
+	\sigma_x = \begin{pmatrix}0 & 1 \\ 1 & 0\end{pmatrix},\,
+	\sigma_y = \begin{pmatrix}0 &-i \\ i & 0\end{pmatrix},\,
+	\sigma_z = \begin{pmatrix}1 & 0 \\ 0 &-1\end{pmatrix}
+	$$
 }
 
 \end{document}
