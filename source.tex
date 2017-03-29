@@ -1,6 +1,11 @@
 \documentclass{beamer}
 
 \usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+
+\usefonttheme{serif}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -8,27 +13,69 @@
 \usepackage{braket}
 \usepackage{color}
 
-\newcommand{\rc}[1]{\textcolor{red}{#1}}
-\newcommand{\gc}[1]{\textcolor{green}{#1}}
+\newcommand{\pdfimg}[2]{\newline\centerline{\includegraphics[width=#2]{#1}}\newline}
+
+\definecolor{myred}{rgb}{0.75, 0.0, 0.0}
+\definecolor{mygreen}{rgb}{0.0, 0.6, 0.1}
+\newcommand{\rc}[1]{\textcolor{myred}{#1}}
+\newcommand{\gc}[1]{\textcolor{mygreen}{#1}}
 \newcommand{\bc}[1]{\textcolor{blue}{#1}}
 
 \begin{document}
 
-\title{Quantum Computations}   
+\title{Квантовые вычисления}   
 
-\section{basics}
-
+\section{Основы}
 \frame{
-	\frametitle{Qubit}
+	\frametitle{Квантовый бит}
 	$$\alpha\ket{0} + \beta\ket{1}$$
 	$$\alpha, \beta \in \mathbb{C};\; |\alpha|^2 + |\beta|^2 = 1$$
 	$$\ket{\phi} = \rc{\alpha_\phi} \ket{0} + \rc{\beta_\phi} \ket{1}$$
 	$$\ket{\psi} = \bc{\alpha_\psi} \ket{0} + \bc{\beta_\psi} \ket{1}$$
-	$$\ket{\phi\psi} = \alpha_\phi \alpha_\psi \ket{00} + \alpha_\phi \beta_\psi \ket{01} + \beta_\phi \alpha_\psi \ket{10} + \beta_\phi \beta_\psi \ket{11}$$
-	$$\ket{\zeta\eta} = \alpha_{00} \ket{00} + \alpha_{01} \ket{01} + \alpha_{10} \ket{10} + \alpha_{11} \ket{11}, \; \sum_{i=00}^{11}{|\alpha_i|^2} = 1$$
+	$$\ket{\phi\psi} = \rc{\alpha_\phi} \bc{\alpha_\psi} \ket{00} + \rc{\alpha_\phi} \bc{\beta_\psi} \ket{01} + 
+	  \rc{\beta_\phi} \bc{\alpha_\psi} \ket{10} + \rc{\beta_\phi} \bc{\beta_\psi} \ket{11}$$
+	$$\ket{\zeta\eta} = a \ket{00} + b \ket{01} + c \ket{10} + d \ket{11}, bc = ad$$
 	$$\ket{\nu_0 \nu_1 ... \nu_n} = \sum_{i={00..0}}^{11..1}{\alpha_i \ket{i}}, \; \sum_{i={00..0}}^{11..1}{|\alpha_i|^2} = 1$$
 }
 
-\section{algorithms}
+\section{Операторы}
+\frame{
+	\frametitle{Операторы}
+	$$\hat{\rho} = \ket{\phi}\bra{\phi} = (\alpha\ket{0} + \beta\ket{1})(\alpha^\ast\bra{0} + \beta^\ast\bra{1}) =$$
+	$$= |\alpha|^2\ket{0}\bra{0} + \gc{\alpha\beta^\ast}\ket{0}\bra{1} + \gc{\beta\alpha^\ast}\ket{1}\bra{0} + |\beta|^2\ket{1}\bra{1}$$
+	$$\langle\gc{\alpha^\ast\beta}\rangle = 0 \; \Rightarrow \; \hat{\rho} = |\alpha|^2\ket{0}\bra{0} + |\beta|^2\ket{1}\bra{1}$$
+	$$\hat{U}_{not}\ket{0} = \ket{1},\; \hat{U}_{not}\ket{1} = \ket{0}$$
+	$$\hat{H}\ket{0} = \frac{\ket{0} + \ket{1}}{\sqrt{2}},\; \hat{H}\ket{1} = \frac{\ket{0} - \ket{1}}{\sqrt{2}}$$
+	$$\hat{U}_{cnot}\ket{a,b} = \ket{a, a + b}$$
+	$$\hat{U}_{cnot}(\alpha_1\ket{0}_1 + \beta_1\ket{1}_1)(\alpha_2\ket{0}_2 + \beta_2\ket{1}_2)$$
+}
+
+\section{Алгоритмы}
+\frame{
+	\frametitle{Задача Дойча}
+	Пусть у нас есть булева функция $f(\bc{x_1, ..., x_n}) \rightarrow \{0, 1\}$, и она:\newline
+	либо постоянна --- $\forall x:\: f(x) = C$,\newline
+	либо сбалансирована --- $\sum_{i=0}^{2^n-1}{(-1)^{f(i)}} = 0$.
+	$$\hat{U}_f\ket{\bc{x_1, ..., x_n},\; \rc{x_{n+1}}} = \ket{x_1, ..., x_n,\; x_{n+1} + f(x_1, ..., x_n)}$$
+	\pdfimg{deutsch.pdf}{200pt}
+	$$\ket{\theta} = \hat{H}_{\bc{1..n}} (\hat{U}_{f} \hat{H}_{\bc{1..n},\rc{n+1}} \ket{\bc{0..0}\rc{1}})_{\bc{1..n}}$$
+}
+\frame{
+	\frametitle{Задача Дойча}
+	$$\ket{\phi} = \hat{H}_{\bc{1..n},\rc{n+1}}\ket{\bc{0..0}\rc{1}} = 
+	  \frac{1}{C_1}\bc{(\prod_{i=1}^{n}{\ket{0}_i + \ket{1}_i})}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})} =$$
+	$$= \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{\ket{i}_{1..n}}}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})},\; C_1 = 2^{\frac{n+1}{2}}$$
+	$$\ket{\psi} = \hat{U}_f\ket{\phi} = \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{\ket{i}_{1..n}}}\rc{(\ket{0 + f(i)}_{n+1} - \ket{1 + f(i)}_{n+1})} =$$
+	$$= \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{(-1)^{f(i)}\ket{i}_{1..n}}}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})}$$
+	$$\ket{\psi} = \bc{\ket{\psi}_{1..n}}\rc{\ket{\psi}_{n+1}} = \bc{\ket{\psi}_{1..n}}\rc{\frac{\ket{0}_{n+1} - \ket{1}_{n+1}}{\sqrt{2}}}$$
+}
+\frame{
+	\frametitle{Задача Дойча}
+	$$\ket{\theta} = \gc{\hat{H}_{1..n}} \ket{\psi}_{1..n} = \frac{1}{2^{\frac{n}{2}}}\sum_{i=0}^{2^n-1}{(-1)^{f(i)}\gc{\hat{H}_{1..n}}\ket{i}}$$
+	$$\gc{\hat{H}_{1..n}}\ket{i} = \frac{1}{2^{\frac{n}{2}}}(\bc{\ket{0..0}} + ...)$$
+	$$\ket{\theta} = \rc{\frac{1}{2^n}}((\rc{\sum_{i=0}^{2^n-1}{(-1)^{f(i)}}})\bc{\ket{0..0}} + ...) = \rc{A}\bc{\ket{0..0}} + ...$$
+	Если $f$ постоянна, тогда $\rc{A} = 1$, и при измерении $\ket{\theta}$ всегда получим $\bc{\ket{0..0}}$. \newline
+	Если $f$ сбалансирована, тогда $\rc{A} = 0$, и при измерении $\ket{\theta}$ никогда не получим $\bc{\ket{0..0}}$.
+}
 
 \end{document}
