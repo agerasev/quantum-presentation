@@ -12,53 +12,88 @@
 \usepackage{amsfonts}
 \usepackage{braket}
 \usepackage{color}
+\usepackage{graphicx}
+\usepackage{textpos}
 
 \newcommand{\pdfimg}[2]{\newline\centerline{\includegraphics[width=#2]{#1}}\newline}
 
 \definecolor{myred}{rgb}{0.75, 0.0, 0.0}
-\definecolor{mygreen}{rgb}{0.0, 0.6, 0.1}
+\definecolor{mygreen}{rgb}{0.0, 0.5, 0.1}
 \newcommand{\rc}[1]{\textcolor{myred}{#1}}
 \newcommand{\gc}[1]{\textcolor{mygreen}{#1}}
 \newcommand{\bc}[1]{\textcolor{blue}{#1}}
 
 \begin{document}
 
-\title{Квантовые вычисления}   
+\title{Квантовые вычисления}
+\subtitle{
+	Основные принципы.\newline
+	Примеры квантовых алгоритмов.\newline
+	Сложности реализации.\newline
+	Обзор текущей ситуации.
+}
+\date{}
+
+\frame{\titlepage} 
 
 \section{Основы}
 \frame{
 	\frametitle{Кубит}
-	$$\alpha\ket{0} + \beta\ket{1}$$
+	$$\ket{\theta} = \alpha\ket{0} + \beta\ket{1}$$
 	$$\alpha, \beta \in \mathbb{C};\; |\alpha|^2 + |\beta|^2 = 1$$
+	\pause
 	$$\ket{\phi} = \rc{\alpha_\phi} \ket{0} + \rc{\beta_\phi} \ket{1}$$
 	$$\ket{\psi} = \bc{\alpha_\psi} \ket{0} + \bc{\beta_\psi} \ket{1}$$
 	$$\ket{\phi\psi} = \rc{\alpha_\phi} \bc{\alpha_\psi} \ket{00} + \rc{\alpha_\phi} \bc{\beta_\psi} \ket{01} + 
 	  \rc{\beta_\phi} \bc{\alpha_\psi} \ket{10} + \rc{\beta_\phi} \bc{\beta_\psi} \ket{11}$$
+	\pause
 	$$\ket{\zeta\eta} = a \ket{00} + b \ket{01} + c \ket{10} + d \ket{11}, bc = ad$$
-	$$\ket{\nu_0 \nu_1 ... \nu_n} = \sum_{i={00..0}}^{11..1}{\alpha_i \ket{i}}, \; \sum_{i={00..0}}^{11..1}{|\alpha_i|^2} = 1$$
+	\pause
+	$$\ket{\nu_1 \nu_2 ... \nu_n} = \sum_{i=0}^{2^n - 1}{\alpha_i \ket{i}}, \; \sum_{i={0}}^{2^n - 1}{|\alpha_i|^2} = 1$$
 }
 
-\section{Операторы}
 \frame{
-	\frametitle{Операторы}
-	$$\hat{\rho} = \ket{\phi}\bra{\phi} = (\alpha\ket{0} + \beta\ket{1})(\alpha^\ast\bra{0} + \beta^\ast\bra{1}) =$$
-	$$= |\alpha|^2\ket{0}\bra{0} + \gc{\alpha\beta^\ast}\ket{0}\bra{1} + \gc{\beta\alpha^\ast}\ket{1}\bra{0} + |\beta|^2\ket{1}\bra{1}$$
-	$$\langle\gc{\alpha^\ast\beta}\rangle = 0 \; \Rightarrow \; \hat{\rho} = |\alpha|^2\ket{0}\bra{0} + |\beta|^2\ket{1}\bra{1}$$
+	\frametitle{Квантовые вентили}
+	\pause
 	$$\hat{U}_{not}\ket{0} = \ket{1},\; \hat{U}_{not}\ket{1} = \ket{0}$$
+	\pause
 	$$\hat{H}\ket{0} = \frac{\ket{0} + \ket{1}}{\sqrt{2}},\; \hat{H}\ket{1} = \frac{\ket{0} - \ket{1}}{\sqrt{2}}$$
+	\pause
+	$$\hat{R}(\theta)\ket{0} = \ket{0},\; \hat{R}(\theta)\ket{1} = e^{2\pi i\theta}\ket{1}$$
+	\pause
 	$$\hat{U}_{cnot}\ket{a,b} = \ket{a, a + b}$$
-	$$\hat{U}_{cnot}(\alpha_1\ket{0}_1 + \beta_1\ket{1}_1)(\alpha_2\ket{0}_2 + \beta_2\ket{1}_2)$$
+	\pause
+	$$\hat{U}_{cnot}(\alpha_1\ket{0}_1 + \beta_1\ket{1}_1)(\alpha_2\ket{0}_2 + \beta_2\ket{1}_2) =$$
+	$$= \hat{U}_{cnot}(\alpha_1\alpha_2\ket{00} + \alpha_1\beta_2\ket{01} + \beta_1\alpha_2\ket{10} + \beta_1\beta_2\ket{11}) =$$
+	$$= \alpha_1\alpha_2\ket{00} + \alpha_1\beta_2\ket{01} + \beta_1\alpha_2\ket{1\bc{1}} + \beta_1\beta_2\ket{1\bc{0}}$$
+	$$\alpha_1\beta_1\alpha_2^2 \neq \alpha_1\beta_1\beta_2^2$$
 }
 
 \section{Алгоритмы}
+
+\frame{
+	\frametitle{Квантовые алгоритмы}
+	\begin{itemize}  
+		\item Факторизация чисел (П. Шор) 
+		\item Поиск в неструктурированной базе данных (Л. Гровер)
+		\item Алгоритм Дойча
+		\item Телепортация неизвестного состояния
+		\item Квантовая нормализация
+		\item Симуляция произвольной квантовой системы
+		\item И многие другие \ldots 
+	\end{itemize}
+}
+
 \newcommand{\Deutsch}[0]{Задача Дойча}
+
 \frame{
 	\frametitle{\Deutsch}
 	Пусть у нас есть булева функция $f(\bc{x_1, ..., x_n}) \rightarrow \{0, 1\}$, и она:\newline
 	либо постоянна --- $\forall x:\: f(x) = C$,\newline
 	либо сбалансирована --- $\sum_{i=0}^{2^n-1}{(-1)^{f(i)}} = 0$.
+	\pause
 	$$\hat{U}_f\ket{\bc{x_1, ..., x_n},\; \rc{x_{n+1}}} = \ket{x_1, ..., x_n,\; x_{n+1} + f(x_1, ..., x_n)}$$
-	\pdfimg{deutsch.pdf}{200pt}
+	\pdfimg{deutsch.pdf}{0.6\textwidth}
 	$$\ket{\theta} = \hat{H}^{(\bc{1..n})} (\hat{U}_{f} \hat{H}^{(\bc{1..n},\rc{n+1})} \ket{\bc{0..0}\rc{1}})_{\bc{1..n}}$$
 }
 \frame{
@@ -66,25 +101,33 @@
 	$$\ket{\phi} = \hat{H}^{(\bc{1..n},\rc{n+1})}\ket{\bc{0..0}\rc{1}} = 
 	  \frac{1}{C_1}\bc{(\prod_{i=1}^{n}{\ket{0}_i + \ket{1}_i})}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})} =$$
 	$$= \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{\ket{i}_{1..n}}}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})},\; C_1 = 2^{\frac{n+1}{2}}$$
+	\pause
 	$$\ket{\psi} = \hat{U}_f\ket{\phi} = \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{\ket{i}_{1..n}}}\rc{(\ket{0 + f(i)}_{n+1} - \ket{1 + f(i)}_{n+1})} =$$
 	$$= \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{(-1)^{f(i)}\ket{i}_{1..n}}}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})}$$
+	\pause
 	$$\ket{\psi} = \bc{\ket{\psi}_{1..n}}\rc{\ket{\psi}_{n+1}} = \bc{\ket{\psi}_{1..n}}\rc{\frac{\ket{0}_{n+1} - \ket{1}_{n+1}}{\sqrt{2}}}$$
 }
 \frame{
 	\frametitle{\Deutsch}
 	$$\ket{\theta} = \gc{\hat{H}^{(1..n)}} \ket{\psi}_{1..n} = \frac{1}{2^{\frac{n}{2}}}\sum_{i=0}^{2^n-1}{(-1)^{f(i)}\gc{\hat{H}^{(1..n)}}\ket{i}}$$
+	\pause
 	$$\gc{\hat{H}^{(1..n)}}\ket{i} = \frac{1}{2^{\frac{n}{2}}}(\bc{\ket{0..0}} + ...)$$
+	\pause
 	$$\ket{\theta} = \rc{\frac{1}{2^n}}((\rc{\sum_{i=0}^{2^n-1}{(-1)^{f(i)}}})\bc{\ket{0..0}} + ...) = \rc{A}\bc{\ket{0..0}} + ...$$
+	\pause
 	Если $f$ постоянна, тогда $\rc{A} = \pm 1$, и при измерении $\ket{\theta}$ всегда получим $\bc{\ket{0..0}}$. \newline
 	Если $f$ сбалансирована, тогда $\rc{A} = 0$, и при измерении $\ket{\theta}$ никогда не получим $\bc{\ket{0..0}}$.
 }
 
 \frame{
 	\frametitle{Невозможность квантового копирования\newline(Wooters, Zurek)}
-	$$\hat{U}_{xerox}\ket{\phi}\ket{0} = \ket{\phi}\ket{\phi}$$
+	$$\hat{U}_{xerox}\rc{\ket{\phi}}\bc{\ket{0}} = \rc{\ket{\phi}}\bc{\ket{\phi}}$$
+	\pause
 	$$\ket{\phi} = c_1\ket{\phi_1} + c_2\ket{\phi_2}$$
-	$$\hat{U}_{xerox}(c_1\ket{\phi_1} + c_2\ket{\phi_2})\ket{0} = c_1\ket{\phi_1}\ket{\phi_1} + c_2\ket{\phi_2}\ket{\phi_2} \neq$$
-	$$\neq \ket{\phi}\ket{\phi} = c_1^2\ket{\phi_1}\ket{\phi_1} + c_1c_2\ket{\phi_1}\ket{\phi_2} + c_1c_2\ket{\phi_2}\ket{\phi_1} + c_2^2\ket{\phi_2}\ket{\phi_2}$$
+	\pause
+	$$\hat{U}_{xerox}\rc{(c_1\ket{\phi_1} + c_2\ket{\phi_2})}\bc{\ket{0}} = c_1\rc{\ket{\phi_1}}\bc{\ket{\phi_1}} + c_2\rc{\ket{\phi_2}}\bc{\ket{\phi_2}} \neq$$
+	$$\neq \rc{\ket{\phi}}\bc{\ket{\phi}} = c_1^2\rc{\ket{\phi_1}}\bc{\ket{\phi_1}} + c_1c_2\rc{\ket{\phi_1}}\bc{\ket{\phi_2}} + 
+	  c_1c_2\rc{\ket{\phi_2}}\bc{\ket{\phi_1}} + c_2^2\rc{\ket{\phi_2}}\bc{\ket{\phi_2}}$$
 }
 
 \newcommand{\ketA}[1]{\rc{\ket{#1}_A}}
@@ -97,9 +140,11 @@
 
 \frame{
 	\frametitle{Квантовая телепортация}
-	$$\ket{\gamma}_C = a\ket{0}_C + b\ket{1}_C$$
+	$$\ketC{\gamma} = a\ketC{0} + b\ketC{1}$$
+	\pause
 	$$\ket{\phi^\pm} = \frac{1}{\sqrt{2}}(\ket{00}\pm\ket{11})$$
 	$$\ket{\psi^\pm} = \frac{1}{\sqrt{2}}(\ket{01}\pm\ket{10})$$
+	\pause
 	$$\ketABC{\xi} = \ketAB{\phi^+}\ketC{\gamma} = \frac{1}{\sqrt{2}}(\ketAB{00} + \ketAB{11})(a\ketC{0} + b\ketC{1}) =$$
 	$$= \frac{1}{2}(\ketAC{\phi^+} + \ketAC{\phi^-}\sigma_z^{\gc{(B)}} + \ketAC{\psi^+}\sigma_x^{\gc{(B)}} + \ketAC{\psi^-}i\sigma_y^{\gc{(B)}}))\ketB{\gamma}$$
 	$$
@@ -114,11 +159,11 @@
 	$\ket{k} = \ket{k_n}...\ket{k_1}$ - $n$-кубитовый регистр
 	$$\hat{U}_{QFT}\ket{k} = \frac{1}{\sqrt{2^n}} \sum_{j=0}^{2^n - 1}{e^{\frac{i 2 \pi j k}{2^n}}\ket{j}} =$$
 	$$= \sum_{j_n=0}^{1} ... \sum_{j_1=0}^{1} e^{i 2 \pi k \sum_{l=1}^{n}{j_l/2^l}} \ket{j_n}...\ket{j_1} = \prod_{l=1}^{n}{\frac{\ket{0}_l + e^{i 2 \pi k/2^l}\ket{1}_l}{\sqrt{2}}}$$
-	Квантовое преобразование Фурье представимо в виде прямого произведения однокубитовых вентилей и полиномиально по времени.
 }
 
 
 \newcommand{\Shor}[0]{Алгоритм факторизации (П. Шор)}
+
 \newcommand{\mymod}[1]{\ (\mathrm{mod}\ #1)}
 
 \frame{
@@ -133,8 +178,66 @@
 \frame{
 	\frametitle{\Shor}
 	$$\ket{\psi} = \rc{\ket{\underbrace{00..00}_{t}}} \bc{\ket{\underbrace{00..00}_{n}}},\, n = \lceil \log_2 N \rceil,\, N^2 < x^t < 2N^2$$
-	\pdfimg{shor.pdf}{200pt}
+	\pdfimg{shor.pdf}{0.6\textwidth}
 	$$\hat{V}_x \rc{\ket{j}}\bc{\ket{k}} = \rc{\ket{j}}\bc{\ket{k + x^j \mymod{N}}}$$
+}
+
+\frame{
+	\frametitle{\Shor}
+	$$\hat{V}_x\rc{(\hat{H}^{1..t}\ket{0..0})}\bc{\ket{0..0}} = \hat{V}_x\rc{\frac{1}{\sqrt{2^t}}\sum_{j=1}^{2^t-1}{\ket{j}}}\bc{\ket{0..0}} =
+	  \frac{1}{\sqrt{2^t}}\sum_{k=0}^{r-1}\rc{\sum_{a=0}^{a_{max}}\ket{ar + k}}\bc{\ket{x^k}}$$
+	После измерения второго регистра он перейдёт состояние с одним конкретным $k$:
+	$$\frac{r}{\sqrt{2^t}}\rc{\sum_{a=0}^{a_{max}}\ket{ar + k}}\bc{\ket{x^k}},\; a_{max} \approx \frac{2^t}{r} - 1$$
+	Теперь подействуем на первый регистр обратным преобразованием Фурье:
+	$$\rc{\hat{U}_{QFT}^{(1..t)}}\sqrt{\frac{r}{2^t}}\rc{\sum_{a=0}^{a_{max}}\ket{ar + k}}\bc{\ket{x^k}} =
+	  \frac{\sqrt{r}}{2^t}\sum_{j=0}^{2^t-1}\rc{\sum_{a=0}^{a_{max}}e^{-i\frac{2 \pi j}{2^t}(ar+k)}\ket{j}}\bc{\ket{x^k}}$$
+}
+
+\frame{
+	\frametitle{\Shor}
+	\begin{columns}[onlytextwidth,T]
+		\column{\dimexpr\linewidth-100pt}
+		Теперь измеряем первый регистр, и получаем значение $j$ с вероятностью:
+		$$\omega(j) = |\frac{\sqrt{r}}{2^t}\sum_{a=0}^{a_{max}}e^{-i\frac{2 \pi j}{2^t}(ar+k)}|^2 =$$
+		$$= \frac{r}{2^{2t}}\frac{\sin^2\frac{\pi jr}{2^t}a_{max}}{\sin^2 \frac{\pi jr}{2^t}}$$
+		Характерное распределение $\omega(j)$ приведено на рисунке справа, где пики обусловлены нулями (или близкими к нулю значениями) знаменателя.
+		Из анализа полученного распределения можно найти значение $r$.
+		\column{100pt}
+		\includegraphics[width=\linewidth]{peaks.png}\newline
+	\end{columns}
+}
+
+\section{Проблемы}
+
+\frame{
+	\frametitle{Декогеренция}
+	$$\hat{\rho} = \ket{\phi}\bra{\phi} = (\alpha\ket{0} + \beta\ket{1})(\alpha^\ast\bra{0} + \beta^\ast\bra{1}) =$$
+	$$= |\alpha|^2\ket{0}\bra{0} + \gc{\alpha\beta^\ast}\ket{0}\bra{1} + \gc{\beta\alpha^\ast}\ket{1}\bra{0} + |\beta|^2\ket{1}\bra{1}$$
+	$$\langle\gc{\alpha^\ast\beta}\rangle = 0 \; \Rightarrow \; \hat{\rho} = |\alpha|^2\ket{0}\bra{0} + |\beta|^2\ket{1}\bra{1}$$
+}
+
+\section{Текущая ситуация}
+
+\frame{
+	\includegraphics[width=\textwidth]{d-wave-out-01.jpg}
+}
+
+\frame{
+	\includegraphics[width=\textwidth]{d-wave-out-02.png}
+}
+
+\setlength{\TPHorizModule}{1pt}
+\setlength{\TPVertModule}{1pt}
+\frame{
+	\begin{textblock}{150}(0,-90)
+	\includegraphics[width=\linewidth]{d-wave-in-01.jpg}
+	\end{textblock}
+	\begin{textblock}{150}(160,-90)
+	\includegraphics[width=\linewidth]{d-wave.jpg}
+	\end{textblock}
+	\begin{textblock}{150}(160,20)
+	\includegraphics[width=\linewidth]{d-wave-in-02.jpg}
+	\end{textblock}
 }
 
 \end{document}
