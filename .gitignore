@@ -1,7 +1,9 @@
 *
+!.gitignore
 !Makefile
 !*.svg
 !*.tex
 !*.py
 !*.txt
-!.gitignore
+!*.png
+!*.jpg
