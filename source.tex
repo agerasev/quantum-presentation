@@ -51,8 +51,9 @@
 }
 
 \section{Алгоритмы}
+\newcommand{\Deutsch}[0]{Задача Дойча}
 \frame{
-	\frametitle{Задача Дойча}
+	\frametitle{\Deutsch}
 	Пусть у нас есть булева функция $f(\bc{x_1, ..., x_n}) \rightarrow \{0, 1\}$, и она:\newline
 	либо постоянна --- $\forall x:\: f(x) = C$,\newline
 	либо сбалансирована --- $\sum_{i=0}^{2^n-1}{(-1)^{f(i)}} = 0$.
@@ -61,7 +62,7 @@
 	$$\ket{\theta} = \hat{H}^{(\bc{1..n})} (\hat{U}_{f} \hat{H}^{(\bc{1..n},\rc{n+1})} \ket{\bc{0..0}\rc{1}})_{\bc{1..n}}$$
 }
 \frame{
-	\frametitle{Задача Дойча}
+	\frametitle{\Deutsch}
 	$$\ket{\phi} = \hat{H}^{(\bc{1..n},\rc{n+1})}\ket{\bc{0..0}\rc{1}} = 
 	  \frac{1}{C_1}\bc{(\prod_{i=1}^{n}{\ket{0}_i + \ket{1}_i})}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})} =$$
 	$$= \frac{1}{C_1}\sum_{i=0}^{2^n-1}{\bc{\ket{i}_{1..n}}}\rc{(\ket{0}_{n+1} - \ket{1}_{n+1})},\; C_1 = 2^{\frac{n+1}{2}}$$
@@ -70,16 +71,16 @@
 	$$\ket{\psi} = \bc{\ket{\psi}_{1..n}}\rc{\ket{\psi}_{n+1}} = \bc{\ket{\psi}_{1..n}}\rc{\frac{\ket{0}_{n+1} - \ket{1}_{n+1}}{\sqrt{2}}}$$
 }
 \frame{
-	\frametitle{Задача Дойча}
+	\frametitle{\Deutsch}
 	$$\ket{\theta} = \gc{\hat{H}^{(1..n)}} \ket{\psi}_{1..n} = \frac{1}{2^{\frac{n}{2}}}\sum_{i=0}^{2^n-1}{(-1)^{f(i)}\gc{\hat{H}^{(1..n)}}\ket{i}}$$
 	$$\gc{\hat{H}^{(1..n)}}\ket{i} = \frac{1}{2^{\frac{n}{2}}}(\bc{\ket{0..0}} + ...)$$
 	$$\ket{\theta} = \rc{\frac{1}{2^n}}((\rc{\sum_{i=0}^{2^n-1}{(-1)^{f(i)}}})\bc{\ket{0..0}} + ...) = \rc{A}\bc{\ket{0..0}} + ...$$
-	Если $f$ постоянна, тогда $\rc{A} = 1$, и при измерении $\ket{\theta}$ всегда получим $\bc{\ket{0..0}}$. \newline
+	Если $f$ постоянна, тогда $\rc{A} = \pm 1$, и при измерении $\ket{\theta}$ всегда получим $\bc{\ket{0..0}}$. \newline
 	Если $f$ сбалансирована, тогда $\rc{A} = 0$, и при измерении $\ket{\theta}$ никогда не получим $\bc{\ket{0..0}}$.
 }
 
 \frame{
-	\frametitle{Невозможность квантового копирования}
+	\frametitle{Невозможность квантового копирования\newline(Wooters, Zurek)}
 	$$\hat{U}_{xerox}\ket{\phi}\ket{0} = \ket{\phi}\ket{\phi}$$
 	$$\ket{\phi} = c_1\ket{\phi_1} + c_2\ket{\phi_2}$$
 	$$\hat{U}_{xerox}(c_1\ket{\phi_1} + c_2\ket{\phi_2})\ket{0} = c_1\ket{\phi_1}\ket{\phi_1} + c_2\ket{\phi_2}\ket{\phi_2} \neq$$
@@ -106,6 +107,34 @@
 	\sigma_y = \begin{pmatrix}0 &-i \\ i & 0\end{pmatrix},\,
 	\sigma_z = \begin{pmatrix}1 & 0 \\ 0 &-1\end{pmatrix}
 	$$
+}
+
+\frame{
+	\frametitle{Квантовое преобразование Фурье}
+	$\ket{k} = \ket{k_n}...\ket{k_1}$ - $n$-кубитовый регистр
+	$$\hat{U}_{QFT}\ket{k} = \frac{1}{\sqrt{2^n}} \sum_{j=0}^{2^n - 1}{e^{\frac{i 2 \pi j k}{2^n}}\ket{j}} =$$
+	$$= \sum_{j_n=0}^{1} ... \sum_{j_1=0}^{1} e^{i 2 \pi k \sum_{l=1}^{n}{j_l/2^l}} \ket{j_n}...\ket{j_1} = \prod_{l=1}^{n}{\frac{\ket{0}_l + e^{i 2 \pi k/2^l}\ket{1}_l}{\sqrt{2}}}$$
+	Квантовое преобразование Фурье представимо в виде прямого произведения однокубитовых вентилей и полиномиально по времени.
+}
+
+
+\newcommand{\Shor}[0]{Алгоритм факторизации (П. Шор)}
+\newcommand{\mymod}[1]{\ (\mathrm{mod}\ #1)}
+
+\frame{
+	\frametitle{\Shor}
+	Факторизация числа - нахождение его делителей\newline
+	Классическая сложность: $exp(c(\log N)^{\frac{1}{3}}(\log \log N)^{\frac{2}{3}})$\newline
+	Квантовая сложность: $(\log N)^2 (\log \log N) (\log \log \log N)$\newline
+	Для нахождения множителей числа $N$ достаточно найти период $r$, такой что $\exists x:\: x^r \equiv 1 \mymod{N}$\newline
+	Если $r$ чётное, тогда $y_{1,2} = \gcd(x^{\frac{r}{2}} \pm 1, N)$ - делители числа $N$
+}
+
+\frame{
+	\frametitle{\Shor}
+	$$\ket{\psi} = \rc{\ket{\underbrace{00..00}_{t}}} \bc{\ket{\underbrace{00..00}_{n}}},\, n = \lceil \log_2 N \rceil,\, N^2 < x^t < 2N^2$$
+	\pdfimg{shor.pdf}{200pt}
+	$$\hat{V}_x \rc{\ket{j}}\bc{\ket{k}} = \rc{\ket{j}}\bc{\ket{k + x^j \mymod{N}}}$$
 }
 
 \end{document}

@@ -2,4 +2,5 @@
 !Makefile
 !*.svg
 !*.tex
+!*.py
 !.gitignore
