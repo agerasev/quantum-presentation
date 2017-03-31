@@ -30,7 +30,7 @@
 	Основные принципы.\newline
 	Примеры квантовых алгоритмов.\newline
 	Сложности реализации.\newline
-	Обзор текущей ситуации.
+	Недавние достижения.
 }
 \date{}
 
@@ -47,7 +47,7 @@
 	$$\ket{\phi\psi} = \rc{\alpha_\phi} \bc{\alpha_\psi} \ket{00} + \rc{\alpha_\phi} \bc{\beta_\psi} \ket{01} + 
 	  \rc{\beta_\phi} \bc{\alpha_\psi} \ket{10} + \rc{\beta_\phi} \bc{\beta_\psi} \ket{11}$$
 	\pause
-	$$\ket{\zeta\eta} = a \ket{00} + b \ket{01} + c \ket{10} + d \ket{11}, bc = ad$$
+	$$\ket{\phi\psi} = a \ket{00} + b \ket{01} + c \ket{10} + d \ket{11}, bc = ad$$
 	\pause
 	$$\ket{\nu_1 \nu_2 ... \nu_n} = \sum_{i=0}^{2^n - 1}{\alpha_i \ket{i}}, \; \sum_{i={0}}^{2^n - 1}{|\alpha_i|^2} = 1$$
 }
@@ -169,8 +169,11 @@
 \frame{
 	\frametitle{\Shor}
 	Факторизация числа - нахождение его делителей\newline
+	\pause
 	Классическая сложность: $exp(c(\log N)^{\frac{1}{3}}(\log \log N)^{\frac{2}{3}})$\newline
+	\pause
 	Квантовая сложность: $(\log N)^2 (\log \log N) (\log \log \log N)$\newline
+	\pause
 	Для нахождения множителей числа $N$ достаточно найти период $r$, такой что $\exists x:\: x^r \equiv 1 \mymod{N}$\newline
 	Если $r$ чётное, тогда $y_{1,2} = \gcd(x^{\frac{r}{2}} \pm 1, N)$ - делители числа $N$
 }
@@ -207,16 +210,83 @@
 	\end{columns}
 }
 
+\newcommand{\Grover}[0]{Поиск в неструктурированной базе данных (Гровер)}
+
+\frame{
+	\frametitle{\Grover}
+	Квантовая база состоит из $N$ $n$-кубитовых регистов.\newline
+	Пусть среди них есть регистр $\ket{\omega}$, и у нас есть квантовый оракул $f(x) = (x = \omega)$.
+	$$\hat{U}_{f_{\omega}}\ket{x}\ket{y} = \ket{x}\ket{y + f_{\omega}(x)}$$
+	$$\hat{U}_{f_{\omega}}\ket{x}\frac{\ket{0} + \ket{1}}{\sqrt{2}} = (-1)^{f_\omega(x)}\ket{x}\frac{\ket{0} + \ket{1}}{\sqrt{2}}$$
+	$$\hat{U}_\omega = 1 - 2\ket{\omega}\bra{\omega}$$
+	$$\ket{s} = \frac{1}{\sqrt{N}}\sum_{x=0}^{N-1}\ket{x}$$
+	$$\hat{U}_s = 2\ket{s}\bra{s} - 1,\; \hat{U}_G = \hat{U}_s\hat{U}_\omega$$
+	$$\hat{U}_G^m\ket{s} = \ket{\omega};\; m = \Big[ {\frac{\pi}{4}\sqrt{N}} \Big]$$
+}
+
 \section{Проблемы}
+
+\frame{
+	\frametitle{Трудности практической реализации}
+	Основная проблема - трудно изолировать квантовую частицу от внешних воздействий.\newline
+	Способы продлить время жизни частицы:
+	\begin{itemize}
+		\item Улучшение систем хранения частиц.
+		\item Реализация алгоритмов исправления ошибок.
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Типы ошибок}
+	\begin{itemize}
+		\item Инверсия бита: $\ket{0} \rightarrow \ket{1}$
+		\item Ошибка фазы: $\ket{1} \rightarrow -\ket{1}$
+		\item Малые ошибки: $a\ket{0} + b\ket{1} \rightarrow a'\ket{0} + b'\ket{1}$
+		\item Декогеренция
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Алгоритм исправления ошибок}
+	Можно хранить не один, а 3 кубита, и исправлять одиночную инверсию большинством голосов.
+	$$a\ket{0} + b\ket{1} \rightarrow a\ket{000} + b\ket{111}$$
+	$$\ket{\psi} = \hat{U}_{cnot}^{12}\hat{U}_{cnot}^{23}(a\ket{0} + b\ket{1})\ket{00} = a\ket{000} + b\ket{111}$$
+	$$\hat{E} = e_0(t) + e_1(t)\sigma_x^{(1)} + e_2(t)\sigma_x^{(2)} + e_3(t)\sigma_x^{(3)}$$
+	$$\hat{E}\ket{\psi} = e_0(t)(a\ket{000} + b\ket{111}) + e_1(t)(a\ket{100} + b\ket{011}) +$$
+	$$+ e_2(t)(a\ket{010} + b\ket{101}) + e_3(t)(a\ket{001} + b\ket{110})$$
+	$$\hat{S}\ket{x_1 x_2 x_3}\ket{0 0} = \ket{x_1 x_2 x_3}\ket{x_1 + x_2, x_2 + x_3}$$
+	Измеряя состояния последих двух битов, можно узнать, какие биты инвертировать, чтобы исправить ошибку.
+}
 
 \frame{
 	\frametitle{Декогеренция}
 	$$\hat{\rho} = \ket{\phi}\bra{\phi} = (\alpha\ket{0} + \beta\ket{1})(\alpha^\ast\bra{0} + \beta^\ast\bra{1}) =$$
 	$$= |\alpha|^2\ket{0}\bra{0} + \gc{\alpha\beta^\ast}\ket{0}\bra{1} + \gc{\beta\alpha^\ast}\ket{1}\bra{0} + |\beta|^2\ket{1}\bra{1}$$
 	$$\langle\gc{\alpha^\ast\beta}\rangle = 0 \; \Rightarrow \; \hat{\rho} = |\alpha|^2\ket{0}\bra{0} + |\beta|^2\ket{1}\bra{1}$$
+	При декогеренции кубит превращается в обычный бит, только плохого качества.
 }
 
-\section{Текущая ситуация}
+\section{Недавние достижения}
+
+\frame{
+	\frametitle{Недавние достижения}
+	\pause
+	2014
+	\begin{itemize}
+		\item Осуществена квантовая телепортация на дистанцию 3 метра без ошибок.
+		\item Факторизовано на квантовом устройстве наибольшее на данный момент число --- 56153.
+	\end{itemize}
+	\pause
+	2016
+	\begin{itemize}
+		\item Используя 9 кубитов, была точно просимулирована молекула водорода (Google).
+	\end{itemize}
+	\pause
+	2017
+	\begin{itemize}
+		\item Сделано квантовое устройство с 2000 кубитами\newline(D-Wave 2000Q).
+	\end{itemize}
+}
 
 \frame{
 	\includegraphics[width=\textwidth]{d-wave-out-01.jpg}
@@ -238,6 +308,9 @@
 	\begin{textblock}{150}(160,20)
 	\includegraphics[width=\linewidth]{d-wave-in-02.jpg}
 	\end{textblock}
+}
+\frame{
+	\includegraphics[width=0.5\textwidth]{d-wave-out-02.png}
 }
 
 \end{document}
